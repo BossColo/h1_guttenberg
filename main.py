@@ -10,17 +10,8 @@ from driver_resources.job_context import JobContext
 
 def main(main_args):
     """
-    Zip up necessary files to send to the executors, create JobContext,
-    and run whatever job is specified by the first argument after main.py.
+    Run whatever job is specified by the first argument after main.py.
     """
-    if not os.path.isfile('main.py'):
-        os.chdir(os.path.dirname(__file__))
-    job_files = zipfile.ZipFile('jobs.zip', 'w')
-    for root, _, files in os.walk('jobs'):
-        for file in files:
-            job_files.write(os.path.join(root, file))
-    job_files.close()
-
     job_module = importlib.import_module(f'jobs.{main_args.job}')
     jc = JobContext(main_args.master, app_name=main_args.job)
     jc.spark.sparkContext.setLogLevel(main_args.log_level)
@@ -38,6 +29,11 @@ if __name__ == '__main__':
     # the subparser looks for the name of the module that the job is in, as importlib is used later to import the job
     # and will look for the job in the module specified by the job argument.
     subparsers = parser.add_subparsers(title='Application', description='Spark application to run.', dest='job')
+
+    process_files_parser = subparsers.add_parser('guttenberg', help='Run Guttenberg project')
+
+    process_files_parser.add_argument('-d', '--data', nargs='?', type=str, default='data/*.txt',
+                                      help='Directory where data is stored.')
 
     args = parser.parse_args()
 

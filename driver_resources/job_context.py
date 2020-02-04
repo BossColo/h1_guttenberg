@@ -20,7 +20,7 @@ class JobContext:
         if master:
             self.sc_conf.setMaster(master)
         self.sc_conf.setAll([
-                # ('spark.submit.pyFiles', 'jobs.zip'),
+                ('spark.driver.memory', '10g'),
                 ('spark.pyspark.driver.python', sys.executable)
             ])
         if app_name:
