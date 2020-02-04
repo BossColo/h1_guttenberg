@@ -64,6 +64,7 @@ def parse_data(data):
     This function is meant to be used with mapPartitions. It will take a partition (single book's data), and parse
     out any fields in the format 'key: value'. It will also look for a line with '***' in it, which should signal the
     beginning of the text. It will take the book text, replace new lines with spaces, and strip extra whitespace.
+
     :param data: data from a single partition of the full data (information about a single book)
     :return: list containing fields that will be used to answer questions
     """
